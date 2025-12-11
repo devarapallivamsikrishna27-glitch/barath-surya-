@@ -1,0 +1,25 @@
+{
+  "bleeding": {
+    "triage": "emergency",
+    "steps": [
+      "Apply firm pressure to the wound with a clean cloth.",
+      "Elevate the injured area if possible.",
+      "If bleeding is severe or doesn't stop within 10 minutes, call emergency services."
+    ]
+  },
+  "burn": {
+    "triage": "non-emergency",
+    "steps": [
+      "Cool the burn under running water for at least 10 minutes.",
+      "Remove jewelry or tight clothing near the burn unless stuck.",
+      "Cover with sterile non-adhesive dressing and seek medical help if severe."
+    ]
+  },
+  "choking": {
+    "triage": "emergency",
+    "steps": [
+      "If the person can't cough or breathe, call emergency services immediately.",
+      "If trained and the person is conscious, give 5 back blows then 5 abdominal thrusts (Heimlich)."
+    ]
+  }
+}
