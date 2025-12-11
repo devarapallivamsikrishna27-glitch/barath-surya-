@@ -2,3 +2,5 @@ node_modules/
 .env
 *.log
 .DS_Store
+first-aid-ai.zip
+first-aid-ai.zip.enc
