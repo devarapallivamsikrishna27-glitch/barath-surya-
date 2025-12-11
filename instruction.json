@@ -3,23 +3,34 @@
     "triage": "emergency",
     "steps": [
       "Apply firm pressure to the wound with a clean cloth.",
-      "Elevate the injured area if possible.",
-      "If bleeding is severe or doesn't stop within 10 minutes, call emergency services."
+      "Raise and support the injured area above heart level if possible.",
+      "Keep the person calm and still. If bleeding soaks through, do not remove the original dressing — add more on top.",
+      "If bleeding is severe or does not stop within 10 minutes, call emergency services."
     ]
   },
   "burn": {
     "triage": "non-emergency",
     "steps": [
-      "Cool the burn under running water for at least 10 minutes.",
-      "Remove jewelry or tight clothing near the burn unless stuck.",
-      "Cover with sterile non-adhesive dressing and seek medical help if severe."
+      "Cool the burn with clean, running (not cold) water for at least 10 minutes.",
+      "Remove jewelry or tight clothing near the burned area if not stuck.",
+      "Cover the burn with a sterile non-adhesive dressing or clean cloth.",
+      "Seek medical help for large or deep burns, chemical burns, or burns to the face/hands/genitals."
     ]
   },
   "choking": {
     "triage": "emergency",
     "steps": [
-      "If the person can't cough or breathe, call emergency services immediately.",
-      "If trained and the person is conscious, give 5 back blows then 5 abdominal thrusts (Heimlich)."
+      "If the person cannot cough, speak, or breathe, call emergency services immediately.",
+      "If the person is conscious and you are trained: give up to 5 back blows between shoulder blades, then up to 5 abdominal thrusts (Heimlich).",
+      "If the person becomes unconscious, start CPR and call emergency services if not already called."
+    ]
+  },
+  "fainting": {
+    "triage": "non-emergency",
+    "steps": [
+      "Help the person lie flat and elevate their legs to restore blood flow to the brain.",
+      "Check that they are breathing and responsive regularly.",
+      "If they do not regain consciousness quickly, call emergency services."
     ]
   }
 }
