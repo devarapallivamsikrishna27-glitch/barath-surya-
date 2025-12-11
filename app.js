@@ -1,3 +1,4 @@
+// public/app.js
 const input = document.getElementById('input');
 const askBtn = document.getElementById('ask');
 const result = document.getElementById('result');
@@ -19,6 +20,7 @@ async function askAI() {
     const data = await resp.json();
     renderResult(data);
   } catch (err) {
+    console.error('Fetch error:', err);
     result.innerHTML = `<div class="card">Error contacting server. Try again.</div>`;
   }
 }
@@ -36,6 +38,8 @@ function renderResult(data) {
     data.steps.forEach((s, i) => {
       html += `<div class="card"><strong>Step ${i+1}:</strong> ${escapeHtml(s)}</div>`;
     });
+  } else if (data && data.message) {
+    html += `<div class="card">${escapeHtml(data.message)}</div>`;
   } else {
     html += `<div class="card">${escapeHtml(JSON.stringify(data))}</div>`;
   }
