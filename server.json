@@ -10,15 +10,21 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const INSTR_PATH = path.join(__dirname, 'instructions.json');
-const instructions = JSON.parse(fs.readFileSync(INSTR_PATH, 'utf8'));
+let instructions = {};
+try {
+  instructions = JSON.parse(fs.readFileSync(INSTR_PATH, 'utf8'));
+} catch (err) {
+  console.error('Cannot read instructions.json:', err.message);
+}
 
-// Basic keyword heuristic
+// Simple keyword heuristic
 function heuristicMatch(text) {
   if (!text) return null;
   const t = text.toLowerCase();
   if (t.includes('bleed') || t.includes('bleeding') || t.includes('cut')) return 'bleeding';
   if (t.includes('burn')) return 'burn';
   if (t.includes('choke') || t.includes('choking')) return 'choking';
+  if (t.includes('faint') || t.includes('fainted')) return 'fainting';
   return null;
 }
 
@@ -26,7 +32,7 @@ app.post('/api/assist', async (req, res) => {
   const { message } = req.body || {};
   if (!message) return res.status(400).json({ error: 'message required' });
 
-  // 1) Fallback from instructions.json if heuristic matches
+  // 1) fallback from instructions.json via heuristic
   const key = heuristicMatch(message);
   if (key && instructions[key]) {
     return res.json({
@@ -38,15 +44,23 @@ app.post('/api/assist', async (req, res) => {
     });
   }
 
-  // 2) If OPENAI_API_KEY present, call OpenAI; otherwise return generic fallback
+  // 2) If OPENAI_API_KEY is present, try calling OpenAI
   try {
     if (!process.env.OPENAI_API_KEY) throw new Error('No OPENAI_API_KEY configured');
 
     const OpenAI = require('openai');
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-    const prompt = `You are a concise first-aid assistant. The user says: "${message}". Output a JSON object with keys: condition (short string), triage ("emergency" or "non-emergency"), confidence (0-1 numeric), steps (array of short instruction strings). Only output valid JSON.`;
+    const prompt = `You are a concise first-aid assistant. The user says: "${message}". Output ONLY valid JSON (no extra text) with keys:
+{
+  "condition": "short label",
+  "triage": "emergency" or "non-emergency",
+  "confidence": 0-1 number,
+  "steps": ["short step 1", "short step 2", ...]
+}
+Keep steps short and actionable.`;
 
+    // Note: API shape may vary by openai package version; adapt if needed
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
@@ -58,7 +72,7 @@ app.post('/api/assist', async (req, res) => {
     try {
       parsed = JSON.parse(text);
     } catch (err) {
-      // If the model didn't respond with strict JSON, fallback to wrapping text
+      // If model didn't return clean JSON, wrap the text safely
       parsed = {
         condition: "unknown",
         triage: "unknown",
@@ -70,19 +84,21 @@ app.post('/api/assist', async (req, res) => {
     return res.json(parsed);
 
   } catch (err) {
-    console.error('AI error or no API key:', err.message);
-    // safe generic reply
+    console.warn('AI error or no API key:', err.message);
+    // safe generic reply if AI unavailable
     return res.json({
       condition: 'unknown',
       triage: 'unknown',
       confidence: 0.3,
-      steps: ["Unable to fetch AI response. If this is life-threatening, call emergency services immediately."],
+      steps: [
+        "Unable to fetch AI response. Use local instructions or call emergency services if severe."
+      ],
       source: 'error'
     });
   }
 });
 
-// fallback for SPA routes
+// SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
