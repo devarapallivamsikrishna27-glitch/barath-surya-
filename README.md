@@ -1,19 +1,14 @@
 # FirstAid AI — Minimal Demo
 
-A simple local demo: AI-assisted first-aid instructions with a local fallback.
+A local demo web app that provides quick first-aid guidance using a local fallback and optional OpenAI integration.
+
+## Files
+- `public/index.html` — frontend UI
+- `public/style.css` — styles
+- `public/app.js` — frontend logic
+- `server.js` — Express backend
+- `instructions.json` — offline fallback data
+- `.env` — (not committed) environment variables (OPENAI_API_KEY)
 
 ## Run locally
-
-1. Install:
-   npm install
-
-2. (Optional) Create a .env file with:
-   OPENAI_API_KEY=your_openai_api_key_here
-
-   If you do NOT set OPENAI_API_KEY, the app will use fallback instructions.json for keyword matches.
-
-3. Start:
-   npm start
-
-4. Open:
-   http://localhost:3000
+1. Install dependencies:
